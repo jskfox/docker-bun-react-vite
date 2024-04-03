@@ -6,7 +6,7 @@ services:
     env_file: 
       - ".env"
     environment:
-     # Host & SSL configuration
+    # Host & SSL configuration
       - VIRTUAL_HOST=${APP_HOSTNAME}
       - VIRTUAL_PORT=${APP_PORT}
       - LETSENCRYPT_HOST=${APP_HOSTNAME}
@@ -23,5 +23,7 @@ services:
     volumes: 
       - ./app/src:/home/bun/app/src      
       - /home/bun/app/node_modules
-    networks:
-      - webproxy
+networks:
+  default:
+    external: true
+    name: webproxy
