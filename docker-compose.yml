@@ -1,0 +1,20 @@
+services:
+  bun-service:
+    container_name: bun-service
+    image: bun-app
+    env_file: 
+      - ".env"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${HOST_PORT}:${APP_PORT}"          
+    
+    command: ["bun", "run", "dev"] # <-- development
+    # command: ["bun", "run", "preview"] # <-- production
+    # command: ["bun", "run", "watch"] # <-- production
+    volumes: 
+      - ./app/src:/home/bun/app/src      
+      - /home/bun/app/node_modules
+    # networks:
+    #   - bun-network
