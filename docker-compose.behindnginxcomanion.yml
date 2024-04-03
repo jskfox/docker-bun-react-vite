@@ -1,0 +1,27 @@
+# Intended to be used with nginx proxy https://github.com/jwilder/docker-letsencrypt-nginx-proxy-companion 
+services:
+  bun-service:
+    container_name: bun-service
+    image: bun-app
+    env_file: 
+      - ".env"
+    environment:
+     # Host & SSL configuration
+      - VIRTUAL_HOST=${APP_HOSTNAME}
+      - VIRTUAL_PORT=${APP_PORT}
+      - LETSENCRYPT_HOST=${APP_HOSTNAME}
+      - LETSENCRYPT_EMAIL=${APP_LETSENCRYPT_MAIL}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${HOST_PORT}:${APP_PORT}"          
+    restart: always
+    command: ["bun", "run", "dev"] # <-- development
+    # command: ["bun", "run", "preview"] # <-- production
+    # command: ["bun", "run", "watch"] # <-- production
+    volumes: 
+      - ./app/src:/home/bun/app/src      
+      - /home/bun/app/node_modules
+    networks:
+      - webproxy
